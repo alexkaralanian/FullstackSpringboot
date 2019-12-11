@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.UUID;
 
-@RestController
-@RequestMapping("student")
+@RestController // Declares Class a REST controller
+@RequestMapping("student") // Declares request path "/student"
 
 public class StudentController {
+    // Declares a "GET" method.
     @GetMapping
     public List<Student> getAllStudents(){
         return List.of(
