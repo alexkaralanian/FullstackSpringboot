@@ -1,25 +1,77 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { getAllStudents } from './client';
+import { Table, Row, Avatar, Spin } from 'antd';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  width: 900px;
+  margin: 20px auto;
+  text-align: center;
+`;
 
 function App() {
+  const [students, setStudents] = React.useState([]);
+  const [isFetching, setIsFetching] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsFetching(true);
+    getAllStudents().then(students => {
+      setStudents(students);
+      setIsFetching(false);
+    });
+  }, []);
+
+  const columns = [
+    {
+      title: '',
+      key: 'avatar',
+      render: (text, student) => (
+        <Avatar size="large">
+          {`${student.firstName
+            .charAt(0)
+            .toUpperCase()}${student.lastName.charAt(0).toUpperCase()}`}
+        </Avatar>
+      )
+    },
+    {
+      title: 'Id',
+      dataIndex: 'studentId',
+      key: 'studentId'
+    },
+    {
+      title: 'First Name',
+      dataIndex: 'firstName',
+      key: 'firstName'
+    },
+    {
+      title: 'Last Name',
+      dataIndex: 'lastName',
+      key: 'lastName'
+    },
+    {
+      title: 'Gender',
+      dataIndex: 'gender',
+      key: 'gender'
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email'
+    }
+  ];
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Row>
+        <h1>{'FullStack Springboot & React'}</h1>
+        {isFetching ? (
+          <Spin size="large" />
+        ) : (
+          <Table dataSource={students} columns={columns} />
+        )}
+      </Row>
+    </Container>
   );
 }
 
