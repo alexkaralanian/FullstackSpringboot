@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { getAllStudents } from './client';
-import { Table, Row, Avatar, Spin } from 'antd';
+import { Table, Avatar, Spin } from 'antd';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -28,9 +28,8 @@ function App() {
       key: 'avatar',
       render: (text, student) => (
         <Avatar size="large">
-          {`${student.firstName
-            .charAt(0)
-            .toUpperCase()}${student.lastName.charAt(0).toUpperCase()}`}
+          {`${student.firstName.charAt(0).toUpperCase()}
+            ${student.lastName.charAt(0).toUpperCase()}`}
         </Avatar>
       )
     },
@@ -63,14 +62,14 @@ function App() {
 
   return (
     <Container>
-      <Row>
+      <div>
         <h1>{'FullStack Springboot & React'}</h1>
         {isFetching ? (
           <Spin size="large" />
         ) : (
           <Table dataSource={students} columns={columns} />
         )}
-      </Row>
+      </div>
     </Container>
   );
 }
