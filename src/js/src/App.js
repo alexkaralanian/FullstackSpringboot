@@ -1,8 +1,10 @@
 import React from 'react';
 import './App.css';
 import { getAllStudents } from './client';
-import { Table, Avatar, Spin } from 'antd';
+import { Table, Avatar, Spin, Modal } from 'antd';
+import Footer from './Footer';
 import styled from 'styled-components';
+import AddStudentForm from './AddStudentForm';
 
 const Container = styled.div`
   width: 900px;
@@ -13,6 +15,10 @@ const Container = styled.div`
 function App() {
   const [students, setStudents] = React.useState([]);
   const [isFetching, setIsFetching] = React.useState(false);
+  const [
+    isAddStudentModalVisible,
+    setIsAddStudentModalVisible
+  ] = React.useState(false);
 
   React.useEffect(() => {
     setIsFetching(true);
@@ -21,6 +27,9 @@ function App() {
       setIsFetching(false);
     });
   }, []);
+
+  const openAddStudentModal = () => setIsAddStudentModalVisible(true);
+  const closeAddStudentModal = () => setIsAddStudentModalVisible(false);
 
   const columns = [
     {
@@ -63,12 +72,28 @@ function App() {
   return (
     <Container>
       <div>
-        <h1>{'FullStack Springboot & React'}</h1>
+        <h1>FullStack Springboot & React</h1>
         {isFetching ? (
           <Spin size="large" />
         ) : (
-          <Table dataSource={students} columns={columns} />
+          <div>
+            <Table dataSource={students} columns={columns} rowKey="studentId" />
+            <Modal
+              title="Add New Student"
+              visible={isAddStudentModalVisible}
+              onOk={closeAddStudentModal}
+              onCancel={closeAddStudentModal}
+              width={1000}
+            >
+              <AddStudentForm />
+            </Modal>
+            />
+          </div>
         )}
+        <Footer
+          numberOfStudents={students.length}
+          openAddStudentModal={openAddStudentModal}
+        />
       </div>
     </Container>
   );
