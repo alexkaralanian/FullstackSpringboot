@@ -1,10 +1,10 @@
-import React from 'react';
-import './App.css';
-import { getAllStudents } from './client';
-import { Table, Avatar, Spin, Modal } from 'antd';
-import Footer from './Footer';
-import styled from 'styled-components';
-import AddStudentForm from './AddStudentForm';
+import React from "react";
+import "./App.css";
+import { getAllStudents } from "./client";
+import { Table, Avatar, Spin, Modal } from "antd";
+import Footer from "./Footer";
+import styled from "styled-components";
+import AddStudentForm from "./AddStudentForm";
 
 const Container = styled.div`
   width: 900px;
@@ -33,8 +33,8 @@ function App() {
 
   const columns = [
     {
-      title: '',
-      key: 'avatar',
+      title: "",
+      key: "avatar",
       render: (text, student) => (
         <Avatar size="large">
           {`${student.firstName.charAt(0).toUpperCase()}
@@ -43,29 +43,29 @@ function App() {
       )
     },
     {
-      title: 'Id',
-      dataIndex: 'studentId',
-      key: 'studentId'
+      title: "Id",
+      dataIndex: "studentId",
+      key: "studentId"
     },
     {
-      title: 'First Name',
-      dataIndex: 'firstName',
-      key: 'firstName'
+      title: "First Name",
+      dataIndex: "firstName",
+      key: "firstName"
     },
     {
-      title: 'Last Name',
-      dataIndex: 'lastName',
-      key: 'lastName'
+      title: "Last Name",
+      dataIndex: "lastName",
+      key: "lastName"
     },
     {
-      title: 'Gender',
-      dataIndex: 'gender',
-      key: 'gender'
+      title: "Gender",
+      dataIndex: "gender",
+      key: "gender"
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email'
+      title: "Email",
+      dataIndex: "email",
+      key: "email"
     }
   ];
 
@@ -77,7 +77,12 @@ function App() {
           <Spin size="large" />
         ) : (
           <div>
-            <Table dataSource={students} columns={columns} rowKey="studentId" />
+            <Table
+              dataSource={students}
+              columns={columns}
+              rowKey="studentId"
+              style={{ marginBottom: "100px" }}
+            />
             <Modal
               title="Add New Student"
               visible={isAddStudentModalVisible}
@@ -85,9 +90,18 @@ function App() {
               onCancel={closeAddStudentModal}
               width={1000}
             >
-              <AddStudentForm />
+              <AddStudentForm
+                onSuccess={() => {
+                  closeAddStudentModal();
+                  setIsFetching(true);
+                  getAllStudents().then(students => {
+                    setStudents(students);
+                    setIsFetching(false);
+                  });
+                }}
+                handleReset
+              />
             </Modal>
-            />
           </div>
         )}
         <Footer

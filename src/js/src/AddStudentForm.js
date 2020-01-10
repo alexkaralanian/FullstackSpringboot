@@ -1,44 +1,43 @@
-import React from 'react';
-import { Formik } from 'formik';
-import { Input, Button } from 'antd';
-import { addNewStudent } from './client';
+import React from "react";
+import { Formik } from "formik";
+import { Input, Button } from "antd";
+import { addNewStudent } from "./client";
 
-const AddStudentForm = () => {
+const AddStudentForm = ({ onSuccess }) => {
   const inputStyles = {
-    marginBottom: '5px'
+    marginBottom: "5px"
   };
 
   return (
     <Formik
-      initialValues={{ firstName: '', lastName: '', email: '', gender: '' }}
+      initialValues={{ firstName: "", lastName: "", email: "", gender: "" }}
       validate={values => {
         const errors = {};
         if (!values.email) {
-          errors.email = 'Required';
+          errors.email = "Required";
         } else if (
           !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
         ) {
-          errors.email = 'Invalid email address';
+          errors.email = "Invalid email address";
         }
         if (!values.firstName) {
-          errors.firstName = 'Required';
+          errors.firstName = "Required";
         }
         if (!values.lastName) {
-          errors.lastName = 'Required';
+          errors.lastName = "Required";
         }
         if (!values.gender) {
-          errors.gender = 'Required';
+          errors.gender = "Required";
         } else if (
-          !['MALE', 'male', 'FEMALE', 'female'].includes(values.gender)
+          !["MALE", "male", "FEMALE", "female"].includes(values.gender)
         ) {
-          errors.gender = 'Gender must be MALE, male, FEMALE, or female';
+          errors.gender = "Gender must be MALE, male, FEMALE, or female";
         }
         return errors;
       }}
       onSubmit={(values, { setSubmitting }) => {
         addNewStudent(values).then(() => {
-          alert(JSON.stringify(values));
-          setSubmitting(false);
+          onSuccess();
         });
       }}
     >

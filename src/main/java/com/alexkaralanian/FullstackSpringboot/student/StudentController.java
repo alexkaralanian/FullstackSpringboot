@@ -20,7 +20,7 @@ public class StudentController {
 
     @Autowired
     public StudentController(StudentService studentService) {
-        this.studentService = studentService;
+         this.studentService = studentService;
     }
 
     @GetMapping
@@ -30,7 +30,6 @@ public class StudentController {
 
     @PostMapping
     public void addNewStudent(@RequestBody Student student){
-
         studentService.addNewStudent(student);
     }
 }
