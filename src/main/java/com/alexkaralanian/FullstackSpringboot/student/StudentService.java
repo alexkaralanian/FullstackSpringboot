@@ -19,10 +19,12 @@ public class StudentService {
         this.studentDAO = studentDAO;
     }
 
-     List<Student> getAllStudents(){
+    // GET ALL STUDENTS
+    List<Student> getAllStudents(){
         return studentDAO.selectAllStudents();
      }
 
+    // ADD NEW STUDENT
     void addNewStudent(Student student) {
         addNewStudent(null, student);
     }
@@ -31,7 +33,11 @@ public class StudentService {
         UUID newStudentId = Optional.ofNullable(studentId)
                 .orElse(UUID.randomUUID());
         // TODO: Check email is unique
-
         studentDAO.insertStudent(newStudentId, student);
+    }
+
+    // GET ALL STUDENT COURSES
+    List<StudentCourse> getAllStudentCourses(UUID studentId) {
+        return studentDAO.selectAllStudentCourses(studentId);
     }
 }

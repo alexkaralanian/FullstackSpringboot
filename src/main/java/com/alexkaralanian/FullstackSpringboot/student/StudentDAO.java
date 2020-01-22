@@ -5,23 +5,20 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-// DAO layer is responsible for connecting to DB - saving, retreiving, etc…
 public class StudentDAO { // Data Access Service
 
-    // Class fields
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    // Class Constructor
     public StudentDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     int insertStudent(UUID studentId, Student student) {
-
         String sql = "" +
                 "INSERT INTO student (student_id, first_name, last_name, email, gender) " +
                 "VALUES (?, ?, ?, ?, ?::gender)";
@@ -36,7 +33,7 @@ public class StudentDAO { // Data Access Service
         );
     }
 
-    // Class Methods
+
     List<Student> selectAllStudents(){
         String sql = "" +
                 "SELECT " +
@@ -52,8 +49,31 @@ public class StudentDAO { // Data Access Service
         return jdbcTemplate.query(sql, mapStudentFromDb()); // refactored...
     }
 
-    // Refactor > extract > Method || opt+cmd+m
-    // mapStudentFromDb()
+    List<StudentCourse> selectAllStudentCourses(UUID studentId){
+        String sql = "" +
+                "SELECT " +
+                " student.student_id, " +
+                " course.course_id, " +
+                " course.name, " +
+                " course.description, " +
+                " course.department, " +
+                " course.teacher_name, " +
+                " student_course.start_date, " +
+                " student_course.end_date, " +
+                " student_course.grade " +
+                "FROM student " +
+                "JOIN student_course USING (student_id) " +
+                "JOIN course USING (course_id) " +
+                "WHERE student.student_id = ?"; // parameterized
+
+        return jdbcTemplate.query(
+                sql,
+                // ? passes in parameters
+                new Object[]{studentId},
+                mapStudentCourseFromDb()
+        );
+    }
+
     private RowMapper<Student> mapStudentFromDb() {
         return (resultSet, i) -> {
             String studentIdStr = resultSet.getString("student_id");
@@ -64,7 +84,6 @@ public class StudentDAO { // Data Access Service
             String genderStr = resultSet.getString("gender").toUpperCase();
             Student.Gender gender = Student.Gender.valueOf(genderStr);
 
-            // Return POJO / Student instance.
             return new Student (
                     studentId,
                     firstName,
@@ -73,5 +92,22 @@ public class StudentDAO { // Data Access Service
                     gender
             );
         };
+    }
+
+    private RowMapper<StudentCourse> mapStudentCourseFromDb() {
+        return (resultSet, i) ->
+           new StudentCourse(
+                   UUID.fromString(resultSet.getString("student_id")),
+                   UUID.fromString(resultSet.getString("course_id")),
+                   resultSet.getString("name"),
+                   resultSet.getString("description"),
+                   resultSet.getString("department"),
+                   resultSet.getString("teacher_name"),
+                   resultSet.getDate("start_date").toLocalDate(),
+                   resultSet.getDate("end_date").toLocalDate(),
+                   Optional.ofNullable(resultSet.getString("grade"))
+                           .map(Integer::parseInt)
+                           .orElse(null)
+            );
     }
 }

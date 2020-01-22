@@ -44,8 +44,8 @@ Create-react-app, Ant-Design CSS library, Formik, Styled-Components, Axios.
 Technologies / Lessons Learned:
 
 Docker: How to bash into a container, manage containers.
-PSQL: CLI tool, describing databases + schemas.
+PSQL: CLI tool, describing databases + schemas, inserting records, creating extensions, auto-generating values.
 Flyway: Database migrations, version control.
-SQL: Queries, creating tables, adding/dropping constraints, joins, type casting.
+SQL: Queries, creating tables, link tables, adding/dropping constraints, joins, type casting.
 JAVA / Springboot: RESTful service architecture, DB layer access, Error handling, Object oriented programming.
 REACT - React Hooks (useState, useEffect).
