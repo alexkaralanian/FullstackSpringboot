@@ -2,6 +2,7 @@ package com.alexkaralanian.FullstackSpringboot.student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,8 +15,6 @@ import java.util.UUID;
 // DAO (Data Access) Layer which is resposible for database operations
 
 public class StudentController {
-    // Declares a "GET" method.
-
     private final StudentService studentService;
 
     @Autowired
@@ -25,11 +24,12 @@ public class StudentController {
 
     @GetMapping
     public List<Student> getAllStudents(){
-        return studentService.getAllStudents();
+//        return studentService.getAllStudents();
+        throw new IllegalStateException("Oops cannot get all students");
     }
 
     @PostMapping
-    public void addNewStudent(@RequestBody Student student){
+    public void addNewStudent(@RequestBody @Valid Student student){
         studentService.addNewStudent(student);
     }
 }

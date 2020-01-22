@@ -1,6 +1,8 @@
 package com.alexkaralanian.FullstackSpringboot.student;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 public class Student {
@@ -8,9 +10,17 @@ public class Student {
     // 'private' access modifier encapsulates the fields and methods from public access.
     // 'final' variable cannot be changed. can only be initialized once.
     private final UUID studentId;
+
+    @NotBlank
     private final String firstName;
+
+    @NotBlank
     private final String lastName;
+
+    @NotBlank
     private final String email;
+
+    @NotNull
     private final Gender gender;
 
     // The constructor initializes  / sets state
